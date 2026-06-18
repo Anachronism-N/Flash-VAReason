@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flash-VAReason | Visual-Audio Video Reasoning</title>
+  <meta name="description" content="Demo page for Flash-VAReason: preserving acoustic cues for efficient visual-audio video reasoning." />
+  <style>
+    :root {
+      --bg: #f7f8fc;
+      --panel: rgba(255, 255, 255, 0.78);
+      --ink: #172033;
+      --muted: #657089;
+      --line: rgba(33, 46, 76, 0.12);
+      --blue: #496df3;
+      --cyan: #18a0b8;
+      --violet: #8b5cf6;
+      --green: #18a05f;
+      --shadow: 0 24px 80px rgba(30, 45, 90, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 8%, rgba(73, 109, 243, 0.16), transparent 30%),
+        radial-gradient(circle at 82% 12%, rgba(24, 160, 184, 0.14), transparent 28%),
+        linear-gradient(180deg, #fbfcff 0%, var(--bg) 52%, #ffffff 100%);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: -0.03em; }
+    .logo {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      display: grid; place-items: center; color: white; box-shadow: 0 12px 30px rgba(73, 109, 243, 0.26);
+    }
+    .nav-links { display: flex; gap: 18px; color: var(--muted); font-size: 14px; }
+    .nav-links a:hover { color: var(--ink); }
+
+    .hero {
+      padding: 86px 0 52px;
+      display: grid;
+      grid-template-columns: 1.04fr 0.96fr;
+      gap: 44px;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex; gap: 8px; align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(73, 109, 243, 0.09);
+      color: #3153d8;
+      border: 1px solid rgba(73, 109, 243, 0.16);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    h1 {
+      margin: 18px 0 16px;
+      font-size: clamp(42px, 7vw, 78px);
+      line-height: 0.95;
+      letter-spacing: -0.07em;
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .subtitle {
+      font-size: clamp(18px, 2vw, 22px);
+      color: var(--muted);
+      max-width: 690px;
+      margin: 0 0 26px;
+    }
+    .authors { color: var(--muted); font-size: 15px; margin-bottom: 28px; }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: white;
+      font-weight: 750;
+      box-shadow: 0 10px 28px rgba(30, 45, 90, 0.08);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(30, 45, 90, 0.12); }
+    .btn.primary { color: white; background: linear-gradient(135deg, var(--blue), var(--cyan)); border: 0; }
+
+    .pipeline-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pipeline-card::before {
+      content: "";
+      position: absolute;
+      inset: -80px -90px auto auto;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(73,109,243,0.18), transparent 64%);
+    }
+    .flow { display: grid; gap: 12px; position: relative; }
+    .node {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.86);
+      border: 1px solid var(--line);
+    }
+    .node strong { display: block; margin-bottom: 2px; }
+    .node span { color: var(--muted); font-size: 14px; }
+    .node.visual { border-left: 5px solid var(--blue); }
+    .node.audio { border-left: 5px solid var(--cyan); }
+    .node.compress { border-left: 5px solid var(--violet); }
+    .node.reason { border-left: 5px solid var(--green); }
+    .arrow { text-align: center; color: var(--muted); font-weight: 900; }
+
+    section { padding: 62px 0; }
+    .section-title { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 26px; }
+    h2 { margin: 0; font-size: clamp(30px, 4vw, 46px); letter-spacing: -0.045em; line-height: 1.05; }
+    .section-title p { max-width: 560px; margin: 0; color: var(--muted); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card {
+      background: rgba(255,255,255,0.84);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 16px 48px rgba(30, 45, 90, 0.08);
+    }
+    .kicker { color: var(--blue); font-weight: 850; font-size: 13px; text-transform: uppercase; letter-spacing: 0.09em; }
+    .card h3 { margin: 8px 0 8px; font-size: 21px; letter-spacing: -0.02em; }
+    .card p { margin: 0; color: var(--muted); }
+
+    .video-shell {
+      background: #0e1322;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 26px 90px rgba(10, 15, 35, 0.28);
+    }
+    video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #0e1322; }
+    .video-caption {
+      display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+      padding: 16px 18px;
+      color: rgba(255,255,255,0.78);
+      font-size: 14px;
+    }
+    .video-caption code { color: white; background: rgba(255,255,255,0.1); padding: 3px 7px; border-radius: 8px; }
+
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .metric strong { display: block; font-size: 34px; letter-spacing: -0.05em; line-height: 1; }
+    .metric span { color: var(--muted); font-size: 14px; }
+
+    .method {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .steps { display: grid; gap: 14px; counter-reset: step; }
+    .step { position: relative; padding-left: 58px; }
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute; left: 0; top: 0;
+      width: 40px; height: 40px; border-radius: 14px;
+      display: grid; place-items: center;
+      color: white; font-weight: 900;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+    }
+    .step h3 { margin: 0 0 4px; }
+    .step p { margin: 0; color: var(--muted); }
+
+    .footer {
+      padding: 36px 0 52px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero, .method { grid-template-columns: 1fr; }
+      .grid-3, .metrics { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 28px, 1160px); }
+      .grid-3, .metrics { grid-template-columns: 1fr; }
+      .hero { padding-top: 56px; }
+      .section-title { display: block; }
+      .section-title p { margin-top: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="Flash-VAReason home">
+        <span class="logo">⚡</span>
+        <span>Flash-VAReason</span>
+      </a>
+      <div class="nav-links">
+        <a href="#demo">Demo</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="papers/flash-vareason.pdf">Paper</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top" class="wrap">
+    <header class="hero">
+      <div>
+        <span class="badge">Visual-Audio Guided Video Reasoning</span>
+        <h1>Preserving <span class="gradient-text">Acoustic Cues</span> for Video Reasoning</h1>
+        <p class="subtitle">
+          Flash-VAReason compresses raw audio tokens through information uniqueness, enabling multimodal large language models to reason over visual frames and acoustic evidence without paying the usual token-cost tax.
+        </p>
+        <p class="authors">Haiwei Xue · Zichao Zhao · Zhiyong Wu</p>
+        <div class="cta">
+          <a class="btn primary" href="#demo">Watch Demo</a>
+          <a class="btn" href="papers/flash-vareason.pdf">Download Paper</a>
+          <a class="btn" href="https://github.com/Anachronism-N/Flash-VAReason">GitHub</a>
+        </div>
+      </div>
+      <aside class="pipeline-card" aria-label="Flash-VAReason pipeline overview">
+        <div class="flow">
+          <div class="node visual"><strong>Visual Stream</strong><span>Video frames are encoded and compressed for efficient visual reasoning.</span></div>
+          <div class="arrow">↓</div>
+          <div class="node audio"><strong>Audio Stream</strong><span>Raw acoustic features preserve prosody, environment sounds, and off-screen events.</span></div>
+          <div class="arrow">↓</div>
+          <div class="node compress"><strong>Uniqueness-Driven Compression</strong><span>Audio Time Fusion → Budget Control → Spatial Dynamic Compression.</span></div>
+          <div class="arrow">↓</div>
+          <div class="node reason"><strong>Omni-MLLM Reasoning</strong><span>Compressed visual-audio tokens support faithful answers to user queries.</span></div>
+        </div>
+      </aside>
+    </header>
+
+    <section id="demo">
+      <div class="section-title">
+        <h2>Demo Video</h2>
+        <p>The attached demo is wired into the page. Upload the MP4 to the asset path below and GitHub Pages will render it here directly.</p>
+      </div>
+      <div class="video-shell">
+        <video controls preload="metadata" poster="assets/demo-poster.jpg">
+          <source src="assets/demo_haiwei_v5.mp4" type="video/mp4" />
+          Your browser does not support the video tag. Please open assets/demo_haiwei_v5.mp4 directly.
+        </video>
+        <div class="video-caption">
+          <span>Expected video path: <code>assets/demo_haiwei_v5.mp4</code></span>
+          <span>Poster path: <code>assets/demo-poster.jpg</code></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="method">
+      <div class="section-title">
+        <h2>Why Flash-VAReason?</h2>
+        <p>Visual-only video reasoning misses important acoustic evidence; ASR-only pipelines lose non-verbal cues. Raw audio helps, but uncompressed tokens are expensive.</p>
+      </div>
+      <div class="method">
+        <div class="card steps">
+          <div class="step">
+            <h3>Audio Time Fusion</h3>
+            <p>Merges locally redundant audio frames using short-time stationarity, reducing repeated silence, steady background sounds, and sustained phonetic segments.</p>
+          </div>
+          <div class="step">
+            <h3>Budget Control</h3>
+            <p>Anchors the retained token budget to the original audio duration, keeping compression behavior stable across clips with different redundancy levels.</p>
+          </div>
+          <div class="step">
+            <h3>Spatial Dynamic Compression</h3>
+            <p>Ranks global token uniqueness and keeps the most acoustically distinctive tokens, preserving cues that are useful for downstream reasoning.</p>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <span class="kicker">Cue Preservation</span>
+            <h3>Beyond ASR</h3>
+            <p>Retains prosody, pitch contour, speaker characteristics, and environmental sounds that transcripts cannot carry.</p>
+          </div>
+          <div class="card">
+            <span class="kicker">Efficiency</span>
+            <h3>Fewer Tokens</h3>
+            <p>Compresses audio tokens by an order of magnitude while keeping the informative acoustic evidence.</p>
+          </div>
+          <div class="card">
+            <span class="kicker">Plug-in Design</span>
+            <h3>No Extra Training</h3>
+            <p>Unifies audio and visual compression under information uniqueness without changing the MLLM architecture.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="section-title">
+        <h2>Highlights</h2>
+        <p>Flash-VAReason improves visual-audio reasoning quality while keeping inference efficient on standard video reasoning benchmarks.</p>
+      </div>
+      <div class="metrics">
+        <div class="card metric"><strong>0.5840</strong><span>CharadesEgo BERTScore F1</span></div>
+        <div class="card metric"><strong>2.3789</strong><span>CharadesEgo Qwen-Overall</span></div>
+        <div class="card metric"><strong>0.6585</strong><span>Ego4D BERTScore F1</span></div>
+        <div class="card metric"><strong>18.33×</strong><span>CharadesEgo speedup vs. slowest baseline</span></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>Core Takeaway</h2>
+        <p>Audio is not a decorative modality in video reasoning. It often carries the missing evidence: off-screen events, speaker emotion, environmental context, and causal triggers.</p>
+      </div>
+      <div class="card">
+        <p>
+          Flash-VAReason keeps the audio stream useful by asking a simple question at token level: <strong>which acoustic tokens are unique enough to matter?</strong> The result is a practical visual-audio reasoning pipeline that preserves important cues while remaining fast enough for demo and deployment scenarios.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">© Flash-VAReason · Visual-Audio Guided Video Reasoning</div>
+  </footer>
+</body>
+</html>
