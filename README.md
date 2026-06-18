@@ -6,7 +6,7 @@ Flash-VAReason is a visual-audio guided video reasoning framework that preserves
 
 ## Demo Page
 
-- Project page: https://anachronism-n.github.io/Flash-VAReason/
+- Project page: [https://anachronism-n.github.io/Flash-VAReason/](https://thuhcsi.github.io/interspeech2026-Flash-VAReason/)
 - Demo video asset path: `assets/demo_haiwei_v5.mp4`
 - Demo poster path: `assets/demo-poster.jpg`
 
