@@ -1,10 +1,12 @@
 # Assets
 
-The project page expects these figure assets rendered from the provided paper attachments:
+The project page renders the original figure PDFs directly to avoid blurry raster images.
 
-- `tease.webp` — teaser / task definition figure
-- `overview.webp` — Flash-VAReason framework overview
-- `case.webp` — qualitative example figure
+Required figure files:
+
+- `tease.pdf` — teaser / task definition figure
+- `overview.pdf` — Flash-VAReason framework overview
+- `case.pdf` — qualitative example figure
 
 The demo is embedded from YouTube:
 
