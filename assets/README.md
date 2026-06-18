@@ -1,6 +1,16 @@
 # Assets
 
-Place the web demo video here:
+The project page expects these figure assets rendered from the provided paper attachments:
+
+- `tease.webp` — teaser / task definition figure
+- `overview.webp` — Flash-VAReason framework overview
+- `case.webp` — qualitative example figure
+
+The demo is embedded from YouTube:
+
+- https://youtu.be/7-h1yYGB0JI
+
+Optional local video asset path, if a hosted MP4 is needed later:
 
 - `demo_haiwei_v5.mp4`
 
