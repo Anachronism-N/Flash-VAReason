@@ -23,11 +23,14 @@
     .button { display:inline-flex; align-items:center; justify-content:center; min-width:106px; padding:9px 16px; border-radius:999px; background:#222; color:#fff; text-decoration:none; font-weight:700; font-size:14px; }
     .button.secondary { background:linear-gradient(135deg,var(--accent),var(--accent2)); }
     section { padding:34px 0; border-top:1px solid var(--line); }
-    .paper-img { display:block; width:100%; height:auto; border-radius:14px; background:#fff; border:1px solid var(--line); }
     .figure-box,.table-box,.video-box { background:var(--soft); border:1px solid var(--line); border-radius:18px; padding:18px; overflow:hidden; }
     header .figure-box { max-width:980px; margin:0 auto; }
-    #overview .figure-box { max-width:680px; margin:0 auto; }
-    #case .figure-box { max-width:918px; margin:0 auto; }
+    #overview .figure-box { max-width:560px; margin:0 auto; }
+    #case .figure-box { max-width:840px; margin:0 auto; }
+    .pdf-viewer { display:block; width:100%; border:1px solid var(--line); border-radius:14px; background:#fff; }
+    .teaser-pdf { height:430px; }
+    .overview-pdf { height:560px; }
+    .case-pdf { height:520px; }
     .caption { color:var(--muted); font-size:14px; text-align:center; margin-top:12px; }
     .abstract { text-align:justify; font-size:16px; }
     .results-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px; }
@@ -46,8 +49,8 @@
     .video-frame { position:relative; width:100%; padding-top:56.25%; border-radius:14px; overflow:hidden; background:#111827; }
     .video-frame iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
     footer { color:var(--muted); text-align:center; padding:34px 0 46px; border-top:1px solid var(--line); font-size:14px; }
-    @media (max-width:760px) { .results-grid { grid-template-columns:repeat(2,1fr); } header { padding-top:42px; } }
-    @media (max-width:520px) { .results-grid { grid-template-columns:1fr; } }
+    @media (max-width:760px) { .results-grid { grid-template-columns:repeat(2,1fr); } header { padding-top:42px; } .teaser-pdf{height:320px;} .overview-pdf{height:480px;} .case-pdf{height:390px;} }
+    @media (max-width:520px) { .results-grid { grid-template-columns:1fr; } .teaser-pdf{height:240px;} .overview-pdf{height:390px;} .case-pdf{height:300px;} }
   </style>
 </head>
 <body>
@@ -62,8 +65,10 @@
         <a class="button" href="#demo">Demo</a>
       </div>
       <div class="figure-box">
-        <img class="paper-img" src="assets/tease.webp" alt="Flash-VAReason teaser figure" />
-        <div class="caption">Teaser figure from the provided attachment: visual-audio guided video reasoning with acoustic cue preservation.</div>
+        <object class="pdf-viewer teaser-pdf" data="assets/tease.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH" type="application/pdf">
+          <a href="assets/tease.pdf">Open teaser figure PDF</a>
+        </object>
+        <div class="caption">Teaser figure from the provided PDF attachment: visual-audio guided video reasoning with acoustic cue preservation.</div>
       </div>
     </header>
 
@@ -78,8 +83,10 @@
     <section id="overview">
       <h2>Method Overview</h2>
       <div class="figure-box">
-        <img class="paper-img" src="assets/overview.webp" alt="Overview of the Flash-VAReason framework" />
-        <div class="caption">Overview figure from the provided attachment. Audio tokens pass through Audio Time Fusion, Budget Control, and Spatial Dynamic Compression before entering the Omni-MLLM.</div>
+        <object class="pdf-viewer overview-pdf" data="assets/overview.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf">
+          <a href="assets/overview.pdf">Open overview figure PDF</a>
+        </object>
+        <div class="caption">Overview figure from the provided PDF attachment. Audio tokens pass through Audio Time Fusion, Budget Control, and Spatial Dynamic Compression before entering the Omni-MLLM.</div>
       </div>
     </section>
 
@@ -152,8 +159,10 @@
     <section id="case">
       <h2>Qualitative Example</h2>
       <div class="figure-box">
-        <img class="paper-img" src="assets/case.webp" alt="Qualitative comparison from the provided case attachment" />
-        <div class="caption">Case figure from the provided attachment. Audio resolves the visual ambiguity: after starting the timer, the person picks up a guitar and starts playing it.</div>
+        <object class="pdf-viewer case-pdf" data="assets/case.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH" type="application/pdf">
+          <a href="assets/case.pdf">Open qualitative example PDF</a>
+        </object>
+        <div class="caption">Case figure from the provided PDF attachment. Audio resolves the visual ambiguity: after starting the timer, the person picks up a guitar and starts playing it.</div>
       </div>
     </section>
 
