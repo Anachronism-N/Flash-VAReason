@@ -25,6 +25,9 @@
     section { padding:34px 0; border-top:1px solid var(--line); }
     .paper-img { display:block; width:100%; height:auto; border-radius:14px; background:#fff; border:1px solid var(--line); }
     .figure-box,.table-box,.video-box { background:var(--soft); border:1px solid var(--line); border-radius:18px; padding:18px; overflow:hidden; }
+    header .figure-box { max-width:980px; margin:0 auto; }
+    #overview .figure-box { max-width:680px; margin:0 auto; }
+    #case .figure-box { max-width:918px; margin:0 auto; }
     .caption { color:var(--muted); font-size:14px; text-align:center; margin-top:12px; }
     .abstract { text-align:justify; font-size:16px; }
     .results-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px; }
@@ -87,7 +90,7 @@
           <div class="metric"><strong>0.5840</strong><span>CharadesEgo F1</span></div>
           <div class="metric"><strong>2.3789</strong><span>CharadesEgo Overall</span></div>
           <div class="metric"><strong>0.6585</strong><span>Ego4D F1</span></div>
-          <div class="metric"><strong>18.33x</strong><span>CharadesEgo Speedup</span></div>
+          <div class="metric"><strong>18.33×</strong><span>CharadesEgo Speedup</span></div>
         </div>
 
         <div class="table-card">
@@ -117,18 +120,18 @@
         <div class="table-card">
           <h3>Table 2. Efficiency Results</h3>
           <div class="table-wrap"><table><thead><tr><th>Dataset</th><th>Method</th><th>Overall</th><th>Time (s)</th><th>Speedup</th></tr></thead><tbody>
-            <tr><td>CharadesEgo</td><td>mPLUG-Owl3</td><td>1.9607</td><td>5.32</td><td>21.00x</td></tr>
-            <tr><td>CharadesEgo</td><td>Grounded-Video-LLM</td><td>2.2019</td><td>111.74</td><td>1.00x</td></tr>
-            <tr><td>CharadesEgo</td><td>AKeyS</td><td>1.9397</td><td>15.68</td><td>7.12x</td></tr>
-            <tr><td>CharadesEgo</td><td>FlashVID</td><td>2.2806</td><td>8.95</td><td>12.49x</td></tr>
-            <tr><td>CharadesEgo</td><td>UniComp</td><td>2.2818</td><td>6.49</td><td>17.21x</td></tr>
-            <tr class="highlight"><td>CharadesEgo</td><td>Flash-VAReason</td><td>2.3789</td><td>6.10</td><td>18.33x</td></tr>
-            <tr><td>Ego4D</td><td>mPLUG-Owl3</td><td>1.3528</td><td>6.75</td><td>9.82x</td></tr>
-            <tr><td>Ego4D</td><td>Grounded-Video-LLM</td><td>1.6083</td><td>66.34</td><td>1.00x</td></tr>
-            <tr><td>Ego4D</td><td>AKeyS</td><td>1.4548</td><td>21.91</td><td>3.03x</td></tr>
-            <tr><td>Ego4D</td><td>FlashVID</td><td>1.5152</td><td>16.40</td><td>4.05x</td></tr>
-            <tr><td>Ego4D</td><td>UniComp</td><td>1.6476</td><td>13.08</td><td>5.07x</td></tr>
-            <tr class="highlight"><td>Ego4D</td><td>Flash-VAReason</td><td>1.6480</td><td>13.74</td><td>4.83x</td></tr>
+            <tr><td>CharadesEgo</td><td>mPLUG-Owl3</td><td>1.9607</td><td>5.32</td><td>21.00×</td></tr>
+            <tr><td>CharadesEgo</td><td>Grounded-Video-LLM</td><td>2.2019</td><td>111.74</td><td>1.00×</td></tr>
+            <tr><td>CharadesEgo</td><td>AKeyS</td><td>1.9397</td><td>15.68</td><td>7.12×</td></tr>
+            <tr><td>CharadesEgo</td><td>FlashVID</td><td>2.2806</td><td>8.95</td><td>12.49×</td></tr>
+            <tr><td>CharadesEgo</td><td>UniComp</td><td>2.2818</td><td>6.49</td><td>17.21×</td></tr>
+            <tr class="highlight"><td>CharadesEgo</td><td>Flash-VAReason</td><td>2.3789</td><td>6.10</td><td>18.33×</td></tr>
+            <tr><td>Ego4D</td><td>mPLUG-Owl3</td><td>1.3528</td><td>6.75</td><td>9.82×</td></tr>
+            <tr><td>Ego4D</td><td>Grounded-Video-LLM</td><td>1.6083</td><td>66.34</td><td>1.00×</td></tr>
+            <tr><td>Ego4D</td><td>AKeyS</td><td>1.4548</td><td>21.91</td><td>3.03×</td></tr>
+            <tr><td>Ego4D</td><td>FlashVID</td><td>1.5152</td><td>16.40</td><td>4.05×</td></tr>
+            <tr><td>Ego4D</td><td>UniComp</td><td>1.6476</td><td>13.08</td><td>5.07×</td></tr>
+            <tr class="highlight"><td>Ego4D</td><td>Flash-VAReason</td><td>1.6480</td><td>13.74</td><td>4.83×</td></tr>
           </tbody></table></div>
         </div>
 
