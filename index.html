@@ -3,354 +3,191 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Flash-VAReason | Visual-Audio Video Reasoning</title>
-  <meta name="description" content="Project page for Flash-VAReason: preserving acoustic cues for efficient visual-audio video reasoning." />
+  <title>Flash-VAReason</title>
+  <meta name="description" content="Flash-VAReason: Preserving Acoustic Cues for Video Reasoning" />
   <style>
     :root {
-      --bg: #f7f8fc;
-      --panel: rgba(255, 255, 255, 0.82);
-      --ink: #172033;
-      --muted: #657089;
-      --line: rgba(33, 46, 76, 0.12);
-      --blue: #496df3;
-      --cyan: #18a0b8;
-      --violet: #8b5cf6;
-      --green: #18a05f;
-      --orange: #f59e0b;
-      --shadow: 0 24px 80px rgba(30, 45, 90, 0.12);
+      --fg: #1f2937;
+      --muted: #5f6b7a;
+      --line: #e5e7eb;
+      --soft: #f7f7fb;
+      --accent: #6d42c7;
+      --accent2: #36a3c7;
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 15% 8%, rgba(73, 109, 243, 0.16), transparent 30%),
-        radial-gradient(circle at 82% 12%, rgba(24, 160, 184, 0.14), transparent 28%),
-        linear-gradient(180deg, #fbfcff 0%, var(--bg) 52%, #ffffff 100%);
-      line-height: 1.6;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--fg);
+      background: #fff;
+      line-height: 1.65;
     }
-    a { color: inherit; text-decoration: none; }
-    .wrap { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
-    nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(18px); background: rgba(255,255,255,0.74); border-bottom: 1px solid var(--line); }
-    .nav-inner { height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-    .brand { display: flex; align-items: center; gap: 12px; font-weight: 850; letter-spacing: -0.03em; }
-    .logo { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, var(--blue), var(--cyan)); display: grid; place-items: center; color: white; box-shadow: 0 12px 30px rgba(73,109,243,0.26); }
-    .nav-links { display: flex; gap: 18px; color: var(--muted); font-size: 14px; }
-    .nav-links a:hover { color: var(--ink); }
-
-    .hero { padding: 86px 0 48px; display: grid; grid-template-columns: 1.03fr 0.97fr; gap: 44px; align-items: center; }
-    .badge { display: inline-flex; gap: 8px; align-items: center; padding: 8px 12px; border-radius: 999px; background: rgba(73,109,243,0.09); color: #3153d8; border: 1px solid rgba(73,109,243,0.16); font-size: 13px; font-weight: 760; }
-    h1 { margin: 18px 0 16px; font-size: clamp(42px, 7vw, 78px); line-height: 0.95; letter-spacing: -0.07em; }
-    .gradient-text { background: linear-gradient(90deg, var(--blue), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .subtitle { font-size: clamp(18px, 2vw, 22px); color: var(--muted); max-width: 690px; margin: 0 0 26px; }
-    .authors { color: var(--muted); font-size: 15px; margin-bottom: 28px; }
-    .cta { display: flex; flex-wrap: wrap; gap: 12px; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 14px; border: 1px solid var(--line); background: white; font-weight: 760; box-shadow: 0 10px 28px rgba(30,45,90,0.08); transition: transform 0.18s ease, box-shadow 0.18s ease; }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(30,45,90,0.12); }
-    .btn.primary { color: white; background: linear-gradient(135deg, var(--blue), var(--cyan)); border: 0; }
-
-    .pipeline-card, .card, .figure-card, .table-card { background: var(--panel); border: 1px solid var(--line); border-radius: 28px; box-shadow: var(--shadow); }
-    .pipeline-card { padding: 24px; overflow: hidden; }
-    .flow { display: grid; gap: 12px; position: relative; }
-    .node { padding: 16px 18px; border-radius: 18px; background: rgba(255,255,255,0.88); border: 1px solid var(--line); }
-    .node strong { display: block; margin-bottom: 2px; }
-    .node span { color: var(--muted); font-size: 14px; }
-    .node.visual { border-left: 5px solid var(--blue); }
-    .node.audio { border-left: 5px solid var(--cyan); }
-    .node.compress { border-left: 5px solid var(--violet); }
-    .node.reason { border-left: 5px solid var(--green); }
-    .arrow { text-align: center; color: var(--muted); font-weight: 900; }
-
-    section { padding: 58px 0; }
-    .section-title { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 26px; }
-    h2 { margin: 0; font-size: clamp(30px, 4vw, 46px); letter-spacing: -0.045em; line-height: 1.05; }
-    .section-title p { max-width: 610px; margin: 0; color: var(--muted); }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-    .card { padding: 24px; }
-    .kicker { color: var(--blue); font-weight: 860; font-size: 13px; text-transform: uppercase; letter-spacing: 0.09em; }
-    .card h3, .figure-card h3, .table-card h3 { margin: 8px 0 8px; font-size: 21px; letter-spacing: -0.02em; }
-    .card p, .figure-card p { margin: 0; color: var(--muted); }
-
-    .video-shell { background: #0e1322; border-radius: 30px; overflow: hidden; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 26px 90px rgba(10,15,35,0.28); }
-    video { display: block; width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, #11182a, #19223a); }
-    .video-caption { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; padding: 16px 18px; color: rgba(255,255,255,0.78); font-size: 14px; }
-    .video-caption code { color: white; background: rgba(255,255,255,0.1); padding: 3px 7px; border-radius: 8px; }
-
-    .paper-figures { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 18px; align-items: stretch; }
-    .figure-card { padding: 20px; overflow: hidden; }
-    .figure-card svg { width: 100%; height: auto; display: block; border-radius: 18px; background: #fff; border: 1px solid var(--line); }
-    .figure-caption { margin-top: 12px; color: var(--muted); font-size: 14px; }
-
-    .mini-table-wrap { overflow-x: auto; }
+    .container { width: min(980px, calc(100% - 40px)); margin: 0 auto; }
+    header { text-align: center; padding: 58px 0 28px; }
+    h1 { margin: 0 auto 18px; font-size: clamp(34px, 5vw, 56px); line-height: 1.08; letter-spacing: -0.045em; max-width: 940px; }
+    .authors, .affiliations { color: var(--muted); margin: 7px 0; }
+    .authors { font-size: 18px; }
+    .affiliations { font-size: 15px; }
+    .links { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 106px; padding: 9px 16px; border-radius: 999px;
+      background: #222; color: #fff; text-decoration: none; font-weight: 700; font-size: 14px;
+    }
+    .button.secondary { background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+    section { padding: 34px 0; border-top: 1px solid var(--line); }
+    h2 { text-align: center; font-size: 30px; margin: 0 0 22px; letter-spacing: -0.025em; }
+    p { margin: 0 0 14px; }
+    .abstract { text-align: justify; font-size: 16px; }
+    .figure-box, .table-box, .video-box {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      overflow: hidden;
+    }
+    .overview-svg { width: 100%; height: auto; display: block; background: #fff; border-radius: 14px; border: 1px solid var(--line); }
+    .caption { color: var(--muted); font-size: 14px; text-align: center; margin-top: 12px; }
+    .results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+    .metric { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px; text-align: center; }
+    .metric strong { display: block; font-size: 26px; line-height: 1; color: var(--accent); margin-bottom: 6px; }
+    .metric span { color: var(--muted); font-size: 13px; }
+    .table-wrap { overflow-x: auto; background: #fff; border: 1px solid var(--line); border-radius: 14px; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
-    th { color: #3d4962; background: rgba(73,109,243,0.06); font-size: 13px; }
-    tr.highlight { background: rgba(24,160,184,0.08); font-weight: 850; }
-    .table-card { padding: 22px; overflow: hidden; }
-    .table-note { color: var(--muted); font-size: 13px; margin: 10px 0 0; }
-    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .metric strong { display: block; font-size: 34px; letter-spacing: -0.05em; line-height: 1; }
-    .metric span { color: var(--muted); font-size: 14px; }
-
-    .method { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch; }
-    .steps { display: grid; gap: 14px; counter-reset: step; }
-    .step { position: relative; padding-left: 58px; }
-    .step::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 0; width: 40px; height: 40px; border-radius: 14px; display: grid; place-items: center; color: white; font-weight: 900; background: linear-gradient(135deg, var(--blue), var(--cyan)); }
-    .step h3 { margin: 0 0 4px; }
-    .step p { margin: 0; color: var(--muted); }
-    .footer { padding: 36px 0 52px; color: var(--muted); border-top: 1px solid var(--line); text-align: center; }
-
-    .svg-label { font: 700 14px Inter, Arial, sans-serif; fill: #253047; }
-    .svg-small { font: 600 11px Inter, Arial, sans-serif; fill: #66728a; }
-    .svg-title { font: 800 16px Inter, Arial, sans-serif; fill: #253047; }
-    .svg-box { fill: #ffffff; stroke: rgba(33,46,76,0.18); stroke-width: 1.4; }
-    .svg-soft-blue { fill: rgba(73,109,243,0.10); stroke: rgba(73,109,243,0.40); }
-    .svg-soft-cyan { fill: rgba(24,160,184,0.10); stroke: rgba(24,160,184,0.42); }
-    .svg-soft-violet { fill: rgba(139,92,246,0.10); stroke: rgba(139,92,246,0.42); }
-    .svg-soft-green { fill: rgba(24,160,95,0.10); stroke: rgba(24,160,95,0.42); }
-
-    @media (max-width: 900px) { .hero, .method, .paper-figures { grid-template-columns: 1fr; } .grid-3, .grid-2, .metrics { grid-template-columns: 1fr 1fr; } .nav-links { display: none; } }
-    @media (max-width: 620px) { .wrap { width: min(100% - 28px, 1160px); } .grid-3, .grid-2, .metrics { grid-template-columns: 1fr; } .hero { padding-top: 56px; } .section-title { display: block; } .section-title p { margin-top: 12px; } }
+    th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: center; white-space: nowrap; }
+    th { background: #fbfbfd; font-weight: 800; color: #374151; }
+    td:first-child, th:first-child { text-align: left; }
+    tr:last-child td { border-bottom: 0; }
+    tr.highlight { background: #f0f7ff; font-weight: 800; }
+    .video-frame { position: relative; width: 100%; padding-top: 56.25%; border-radius: 14px; overflow: hidden; background: #111827; }
+    .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    footer { color: var(--muted); text-align: center; padding: 34px 0 46px; border-top: 1px solid var(--line); font-size: 14px; }
+    .svg-label { font: 700 18px Inter, Arial, sans-serif; fill: #6f6395; }
+    .svg-small { font: 700 14px Inter, Arial, sans-serif; fill: #7d739d; }
+    .svg-title { font: 800 20px Inter, Arial, sans-serif; fill: #2e4c6c; }
+    @media (max-width: 760px) {
+      .results-grid { grid-template-columns: repeat(2, 1fr); }
+      header { padding-top: 42px; }
+    }
+    @media (max-width: 520px) { .results-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <nav>
-    <div class="wrap nav-inner">
-      <a class="brand" href="#top" aria-label="Flash-VAReason home"><span class="logo">⚡</span><span>Flash-VAReason</span></a>
-      <div class="nav-links">
-        <a href="#demo">Demo</a>
-        <a href="#figures">Figures</a>
-        <a href="#method">Method</a>
-        <a href="#results">Results</a>
-        <a href="papers/flash-vareason.pdf">Paper</a>
+  <main class="container">
+    <header>
+      <h1>Preserving Acoustic Cues for Video Reasoning:<br />An Efficient Uniqueness-Driven Token Compression Framework</h1>
+      <div class="authors">Haiwei Xue · Zichao Zhao · Zhiyong Wu</div>
+      <div class="affiliations">Tsinghua University · The Hong Kong University of Science and Technology · The Chinese University of Hong Kong</div>
+      <div class="links">
+        <a class="button secondary" href="papers/flash-vareason.pdf">Paper</a>
+        <a class="button" href="https://github.com/Anachronism-N/Flash-VAReason">Code</a>
+        <a class="button" href="#demo">Demo</a>
       </div>
-    </div>
-  </nav>
-
-  <main id="top" class="wrap">
-    <header class="hero">
-      <div>
-        <span class="badge">Visual-Audio Guided Video Reasoning</span>
-        <h1>Preserving <span class="gradient-text">Acoustic Cues</span> for Video Reasoning</h1>
-        <p class="subtitle">Flash-VAReason compresses raw audio tokens through information uniqueness, enabling MLLMs to reason over visual frames and acoustic evidence without paying the usual token-cost tax.</p>
-        <p class="authors">Haiwei Xue · Zichao Zhao · Zhiyong Wu</p>
-        <div class="cta">
-          <a class="btn primary" href="#demo">Watch Demo</a>
-          <a class="btn" href="papers/flash-vareason.pdf">Download Paper</a>
-          <a class="btn" href="https://github.com/Anachronism-N/Flash-VAReason">GitHub</a>
-        </div>
-      </div>
-      <aside class="pipeline-card" aria-label="Flash-VAReason pipeline overview">
-        <div class="flow">
-          <div class="node visual"><strong>Visual Stream</strong><span>Video frames are encoded and compressed for efficient visual reasoning.</span></div>
-          <div class="arrow">↓</div>
-          <div class="node audio"><strong>Audio Stream</strong><span>Raw acoustic features preserve prosody, environmental sound, and off-screen events.</span></div>
-          <div class="arrow">↓</div>
-          <div class="node compress"><strong>Uniqueness-Driven Compression</strong><span>Audio Time Fusion → Budget Control → Spatial Dynamic Compression.</span></div>
-          <div class="arrow">↓</div>
-          <div class="node reason"><strong>Omni-MLLM Reasoning</strong><span>Compressed visual-audio tokens support faithful answers to user queries.</span></div>
-        </div>
-      </aside>
     </header>
 
-    <section id="demo">
-      <div class="section-title">
-        <h2>Demo Video</h2>
-        <p>The page is wired to the demo video path. Put the provided MP4 at <code>assets/demo_haiwei_v5.mp4</code>, and GitHub Pages will render it here.</p>
-      </div>
-      <div class="video-shell">
-        <video controls preload="metadata">
-          <source src="assets/demo_haiwei_v5.mp4" type="video/mp4" />
-          Your browser does not support the video tag. Please open assets/demo_haiwei_v5.mp4 directly.
-        </video>
-        <div class="video-caption">
-          <span>Demo asset path: <code>assets/demo_haiwei_v5.mp4</code></span>
-          <span>Recommended: compressed web MP4, H.264 + AAC</span>
-        </div>
+    <section id="abstract">
+      <h2>Abstract</h2>
+      <div class="abstract">
+        <p>Effective video reasoning requires the joint understanding of visual and acoustic cues. Existing multimodal large language models often discard audio or rely only on ASR transcripts, losing prosody, environmental sounds, speaker characteristics, and other non-verbal evidence. Directly feeding raw audio tokens into MLLMs preserves richer information, but introduces heavy computational overhead.</p>
+        <p>We propose <strong>Flash-VAReason</strong>, a visual-audio video reasoning framework that compresses audio tokens according to information uniqueness. The pipeline consists of <strong>Audio Time Fusion</strong>, <strong>Budget Control</strong>, and <strong>Spatial Dynamic Compression</strong>, reducing audio token count while retaining acoustically distinctive cues. Experiments on CharadesEgo and Ego4D show that acoustic cue preservation improves reasoning quality while maintaining efficient inference.</p>
       </div>
     </section>
 
-    <section id="figures">
-      <div class="section-title">
-        <h2>Paper Figures</h2>
-        <p>Clean web versions of the paper visuals: the task setting, the Flash-VAReason pipeline, and a qualitative example showing why acoustic cues matter.</p>
-      </div>
-      <div class="paper-figures">
-        <div class="figure-card">
-          <h3>Figure 1 · Video Reasoning Task</h3>
-          <svg viewBox="0 0 820 430" role="img" aria-label="Video reasoning task comparison">
-            <defs>
-              <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#6f3fd8" /></marker>
-            </defs>
-            <rect x="18" y="25" width="250" height="122" rx="16" class="svg-box svg-soft-blue" />
-            <text x="36" y="55" class="svg-title">Task Definition</text>
-            <rect x="42" y="82" width="55" height="28" rx="8" fill="#e8f6ee" stroke="#18a05f" />
-            <text x="54" y="101" class="svg-small" fill="#18a05f">INPUT</text>
-            <line x1="110" y1="96" x2="170" y2="96" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow)" />
-            <rect x="184" y="82" width="62" height="28" rx="8" fill="#eef7fb" stroke="#18a0b8" />
-            <text x="197" y="101" class="svg-small" fill="#18a0b8">OUTPUT</text>
-            <text x="44" y="132" class="svg-small">Video + query → faithful answer</text>
-
-            <rect x="292" y="25" width="500" height="110" rx="16" class="svg-box" />
-            <text x="312" y="55" class="svg-title">a) Visual-only Methods</text>
-            <text x="323" y="96" class="svg-label">Videos</text>
-            <line x1="388" y1="91" x2="454" y2="91" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow)" />
-            <text x="466" y="96" class="svg-label">Frames</text>
-            <line x1="535" y1="91" x2="600" y2="91" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow)" />
-            <text x="612" y="96" class="svg-label">MLLM</text>
-            <line x1="668" y1="91" x2="733" y2="91" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow)" />
-            <text x="741" y="96" class="svg-label">Answer</text>
-
-            <rect x="292" y="158" width="500" height="110" rx="16" class="svg-box" />
-            <text x="312" y="188" class="svg-title">b) Visual + Audio via ASR</text>
-            <text x="323" y="229" class="svg-label">Frames</text>
-            <text x="468" y="229" class="svg-label">Audio transcript</text>
-            <line x1="425" y1="224" x2="455" y2="224" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow)" />
-            <line x1="590" y1="224" x2="650" y2="224" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow)" />
-            <text x="665" y="229" class="svg-label">MLLM</text>
-            <text x="312" y="250" class="svg-small">Lexical content retained; prosody and background sounds are mostly lost.</text>
-
-            <rect x="292" y="291" width="500" height="110" rx="16" class="svg-box svg-soft-violet" />
-            <text x="312" y="321" class="svg-title">c) Flash-VAReason</text>
-            <text x="323" y="363" class="svg-label">Frames</text>
-            <text x="440" y="363" class="svg-label">Raw audio</text>
-            <text x="560" y="363" class="svg-label">Compressed tokens</text>
-            <line x1="390" y1="358" x2="430" y2="358" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow)" />
-            <line x1="520" y1="358" x2="550" y2="358" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow)" />
-            <line x1="690" y1="358" x2="735" y2="358" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow)" />
-            <text x="744" y="363" class="svg-label">Answer</text>
-          </svg>
-          <p class="figure-caption">Compared with visual-only or ASR-based pipelines, Flash-VAReason keeps raw acoustic cues and compresses them before reasoning.</p>
-        </div>
-        <div class="figure-card">
-          <h3>Figure 2 · Framework Overview</h3>
-          <svg viewBox="0 0 520 560" role="img" aria-label="Flash-VAReason framework overview">
-            <defs><marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#6f3fd8" /></marker></defs>
-            <rect x="30" y="30" width="120" height="54" rx="12" class="svg-box svg-soft-blue" /><text x="63" y="63" class="svg-label">Videos</text>
-            <rect x="200" y="30" width="120" height="54" rx="12" class="svg-box svg-soft-cyan" /><text x="238" y="63" class="svg-label">Audio</text>
-            <rect x="370" y="30" width="120" height="54" rx="12" class="svg-box" /><text x="398" y="63" class="svg-label">Queries</text>
-            <line x1="90" y1="84" x2="90" y2="130" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow2)" />
-            <line x1="260" y1="84" x2="260" y2="130" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow2)" />
-            <line x1="430" y1="84" x2="430" y2="130" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow2)" />
-            <rect x="30" y="130" width="120" height="54" rx="12" class="svg-box" /><text x="52" y="163" class="svg-label">Visual Encoder</text>
-            <rect x="200" y="130" width="120" height="54" rx="12" class="svg-box" /><text x="220" y="163" class="svg-label">Audio Encoder</text>
-            <rect x="370" y="130" width="120" height="54" rx="12" class="svg-box" /><text x="392" y="163" class="svg-label">Text Encoder</text>
-            <line x1="90" y1="184" x2="90" y2="485" stroke="#496df3" stroke-width="3" marker-end="url(#arrow2)" />
-            <line x1="260" y1="184" x2="260" y2="225" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow2)" />
-            <line x1="430" y1="184" x2="430" y2="485" stroke="#8b5cf6" stroke-width="3" marker-end="url(#arrow2)" />
-            <rect x="120" y="225" width="280" height="70" rx="14" class="svg-box svg-soft-violet" /><text x="172" y="266" class="svg-label">Stage 1 · Audio Time Fusion</text>
-            <line x1="260" y1="295" x2="260" y2="330" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow2)" />
-            <rect x="120" y="330" width="280" height="54" rx="14" class="svg-box svg-soft-green" /><text x="184" y="363" class="svg-label">Stage 2 · Budget Control</text>
-            <line x1="260" y1="384" x2="260" y2="418" stroke="#6f3fd8" stroke-width="3" marker-end="url(#arrow2)" />
-            <rect x="120" y="418" width="280" height="70" rx="14" class="svg-box svg-soft-cyan" /><text x="146" y="459" class="svg-label">Stage 3 · Spatial Dynamic Compression</text>
-            <rect x="58" y="500" width="410" height="42" rx="14" fill="#eaf2ff" stroke="#496df3" /><text x="213" y="526" class="svg-label">Omni-MLLM</text>
-          </svg>
-          <p class="figure-caption">The audio branch passes through ATF, budget control, and SDC before entering the MLLM together with compressed video tokens and user queries.</p>
-        </div>
-      </div>
-      <div class="grid-2" style="margin-top:18px;">
-        <div class="figure-card">
-          <h3>Qualitative Example</h3>
-          <svg viewBox="0 0 720 320" role="img" aria-label="Qualitative comparison using acoustic cues">
-            <rect x="20" y="25" width="205" height="105" rx="16" fill="#f1f5ff" stroke="#cfd8ff" /><rect x="258" y="25" width="205" height="105" rx="16" fill="#f1f5ff" stroke="#cfd8ff" /><rect x="496" y="25" width="205" height="105" rx="16" fill="#f1f5ff" stroke="#cfd8ff" />
-            <text x="82" y="85" class="svg-small">video frame</text><text x="320" y="85" class="svg-small">video frame</text><text x="558" y="85" class="svg-small">video frame</text>
-            <text x="25" y="170" class="svg-title">Q: What does the person do after starting the timer?</text>
-            <rect x="25" y="195" width="670" height="32" rx="10" fill="#fff3f3" stroke="#f7caca" /><text x="42" y="216" class="svg-small">Vision-only baseline: continues to work on the computer.</text>
-            <rect x="25" y="238" width="670" height="32" rx="10" fill="#edfdf5" stroke="#bdebcf" /><text x="42" y="259" class="svg-small">Flash-VAReason: picks up a guitar and starts playing it.</text>
-            <rect x="25" y="281" width="670" height="24" rx="10" fill="#f6f7fb" stroke="#dce1ef" /><text x="42" y="298" class="svg-small">Acoustic cue: the guitar sound resolves the visual ambiguity.</text>
-          </svg>
-          <p class="figure-caption">A case from CharadesEgo where audio provides the missing evidence for the correct answer.</p>
-        </div>
-        <div class="figure-card">
-          <h3>Research Questions</h3>
-          <div class="card" style="box-shadow:none;">
-            <p><strong>RQ1.</strong> Does integrating raw audio improve video reasoning quality?</p><br />
-            <p><strong>RQ2.</strong> Can audio compression preserve quality while keeping inference fast?</p><br />
-            <p><strong>RQ3.</strong> How do ATF, SDC, and uniform sampling compare under quality-speed trade-offs?</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="method">
-      <div class="section-title">
-        <h2>Why Flash-VAReason?</h2>
-        <p>Visual-only reasoning misses important acoustic evidence; ASR-only pipelines lose non-verbal cues. Raw audio helps, but uncompressed tokens are expensive.</p>
-      </div>
-      <div class="method">
-        <div class="card steps">
-          <div class="step"><h3>Audio Time Fusion</h3><p>Merges locally redundant audio frames using short-time stationarity, reducing repeated silence, steady background sounds, and sustained phonetic segments.</p></div>
-          <div class="step"><h3>Budget Control</h3><p>Anchors the retained token budget to the original audio duration, keeping compression stable across clips with different redundancy levels.</p></div>
-          <div class="step"><h3>Spatial Dynamic Compression</h3><p>Ranks global token uniqueness and keeps the most acoustically distinctive tokens for downstream reasoning.</p></div>
-        </div>
-        <div class="grid-3">
-          <div class="card"><span class="kicker">Cue Preservation</span><h3>Beyond ASR</h3><p>Retains prosody, pitch contour, speaker characteristics, and environmental sounds that transcripts cannot carry.</p></div>
-          <div class="card"><span class="kicker">Efficiency</span><h3>Fewer Tokens</h3><p>Compresses audio tokens by an order of magnitude while keeping informative acoustic evidence.</p></div>
-          <div class="card"><span class="kicker">Plug-in Design</span><h3>No Extra Training</h3><p>Unifies audio and visual compression under information uniqueness without changing the MLLM architecture.</p></div>
-        </div>
+    <section id="overview">
+      <h2>Method Overview</h2>
+      <div class="figure-box">
+        <svg class="overview-svg" viewBox="0 0 900 760" role="img" aria-label="Flash-VAReason overview">
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#6d2b9f" /></marker>
+          </defs>
+          <rect width="900" height="760" fill="#fff" />
+          <text x="128" y="58" class="svg-label">Videos</text>
+          <text x="390" y="58" class="svg-label">Audio</text>
+          <text x="660" y="58" class="svg-label">User Queries</text>
+          <line x1="190" y1="50" x2="320" y2="50" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <line x1="150" y1="75" x2="150" y2="128" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <line x1="430" y1="75" x2="430" y2="128" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <line x1="710" y1="75" x2="710" y2="128" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <text x="120" y="165" class="svg-label">Frames</text>
+          <rect x="320" y="122" width="220" height="58" rx="4" fill="#fff" stroke="#b4abc8" stroke-width="3" />
+          <text x="355" y="158" class="svg-label">Audio Encoder</text>
+          <rect x="610" y="122" width="220" height="58" rx="4" fill="#fff" stroke="#d4ccdf" stroke-width="3" />
+          <text x="645" y="158" class="svg-label">Text Encoder</text>
+          <line x1="150" y1="184" x2="150" y2="236" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <line x1="430" y1="184" x2="430" y2="238" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <line x1="710" y1="184" x2="710" y2="238" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <rect x="74" y="230" width="145" height="72" rx="4" fill="#faf8ff" stroke="#d0cae0" stroke-width="3" />
+          <text x="104" y="260" class="svg-label">Visual</text>
+          <text x="100" y="288" class="svg-label">Encoder</text>
+          <text x="24" y="420" class="svg-label" transform="rotate(90 24 420)">Video Token Compression</text>
+          <rect x="42" y="322" width="818" height="170" rx="6" fill="#fffaf0" stroke="#e5a522" stroke-width="3" />
+          <text x="302" y="470" class="svg-label">Stage1 Audio Time Fusion</text>
+          <rect x="78" y="350" width="42" height="32" rx="8" fill="#d8e8fb" stroke="#82a7d9" stroke-width="3" />
+          <rect x="140" y="350" width="42" height="32" rx="8" fill="#d8e8fb" stroke="#82a7d9" stroke-width="3" />
+          <rect x="202" y="350" width="42" height="32" rx="8" fill="#ffe1d2" stroke="#f2a076" stroke-width="3" />
+          <rect x="264" y="350" width="42" height="32" rx="8" fill="#ffe1d2" stroke="#f2a076" stroke-width="3" />
+          <rect x="326" y="350" width="42" height="32" rx="8" fill="#e9edf0" stroke="#b9c1c8" stroke-width="3" />
+          <rect x="388" y="350" width="42" height="32" rx="8" fill="#fff3c7" stroke="#ffd653" stroke-width="3" />
+          <rect x="450" y="350" width="42" height="32" rx="8" fill="#fff3c7" stroke="#ffd653" stroke-width="3" />
+          <rect x="512" y="350" width="42" height="32" rx="8" fill="#d8e8fb" stroke="#82a7d9" stroke-width="3" />
+          <line x1="150" y1="384" x2="225" y2="430" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <line x1="286" y1="384" x2="330" y2="430" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <line x1="430" y1="384" x2="430" y2="430" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <line x1="522" y1="384" x2="490" y2="430" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <line x1="720" y1="252" x2="828" y2="252" stroke="#d6a8ee" stroke-width="4" />
+          <line x1="828" y1="252" x2="828" y2="685" stroke="#d6a8ee" stroke-width="4" marker-end="url(#arrow)" />
+          <rect x="42" y="510" width="818" height="50" fill="#e8f5dc" stroke="#8cc36d" stroke-width="3" />
+          <text x="330" y="544" class="svg-label" fill="#4d7b35">Stage2 Budget Control</text>
+          <rect x="42" y="580" width="818" height="130" rx="6" fill="#f7f5ff" stroke="#514ec7" stroke-width="3" />
+          <text x="185" y="688" class="svg-label">Stage3 Spatial Dynamic Compression</text>
+          <line x1="560" y1="640" x2="650" y2="640" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <line x1="720" y1="665" x2="785" y2="665" stroke="#6d2b9f" stroke-width="4" />
+          <line x1="785" y1="665" x2="785" y2="725" stroke="#6d2b9f" stroke-width="4" marker-end="url(#arrow)" />
+          <rect x="42" y="724" width="818" height="34" fill="#dbeefa" stroke="#8dbde2" stroke-width="3" />
+          <text x="388" y="748" class="svg-title">Omni-MLLM</text>
+        </svg>
+        <div class="caption">Overview of Flash-VAReason. Audio tokens are compressed through ATF, budget control, and SDC before joint visual-audio reasoning.</div>
       </div>
     </section>
 
     <section id="results">
-      <div class="section-title">
-        <h2>Results</h2>
-        <p>Benchmark tables are written directly into the page for readability and fast loading, with Flash-VAReason highlighted.</p>
-      </div>
-      <div class="metrics">
-        <div class="card metric"><strong>0.5840</strong><span>CharadesEgo BERTScore F1</span></div>
-        <div class="card metric"><strong>2.3789</strong><span>CharadesEgo Qwen-Overall</span></div>
-        <div class="card metric"><strong>0.6585</strong><span>Ego4D BERTScore F1</span></div>
-        <div class="card metric"><strong>18.33×</strong><span>CharadesEgo speedup vs. slowest baseline</span></div>
-      </div>
-      <div class="grid-2" style="margin-top:18px;">
-        <div class="table-card">
-          <h3>CharadesEgo Main Results</h3>
-          <div class="mini-table-wrap"><table><thead><tr><th>Method</th><th>F1 ↑</th><th>Overall ↑</th><th>Time ↓</th><th>Speedup ↑</th></tr></thead><tbody>
-            <tr><td>mPLUG-Owl3</td><td>0.5807</td><td>1.9607</td><td>5.32s</td><td>21.00×</td></tr>
-            <tr><td>Grounded-Video-LLM</td><td>0.5832</td><td>2.2019</td><td>111.74s</td><td>1.00×</td></tr>
-            <tr><td>AKeyS</td><td>0.4098</td><td>1.9397</td><td>15.68s</td><td>7.12×</td></tr>
-            <tr><td>FlashVID</td><td>0.5693</td><td>2.2806</td><td>8.95s</td><td>12.49×</td></tr>
-            <tr><td>UniComp</td><td>0.5702</td><td>2.2818</td><td>6.49s</td><td>17.21×</td></tr>
-            <tr class="highlight"><td>Flash-VAReason</td><td>0.5840</td><td>2.3789</td><td>6.10s</td><td>18.33×</td></tr>
-          </tbody></table></div>
+      <h2>Experiment Result</h2>
+      <div class="table-box">
+        <div class="results-grid">
+          <div class="metric"><strong>0.5840</strong><span>CharadesEgo F1</span></div>
+          <div class="metric"><strong>2.3789</strong><span>CharadesEgo Overall</span></div>
+          <div class="metric"><strong>0.6585</strong><span>Ego4D F1</span></div>
+          <div class="metric"><strong>18.33×</strong><span>CharadesEgo Speedup</span></div>
         </div>
-        <div class="table-card">
-          <h3>Ego4D Main Results</h3>
-          <div class="mini-table-wrap"><table><thead><tr><th>Method</th><th>F1 ↑</th><th>Overall ↑</th><th>Time ↓</th><th>Speedup ↑</th></tr></thead><tbody>
-            <tr><td>mPLUG-Owl3</td><td>0.6511</td><td>1.3528</td><td>6.75s</td><td>9.82×</td></tr>
-            <tr><td>Grounded-Video-LLM</td><td>0.6580</td><td>1.6083</td><td>66.34s</td><td>1.00×</td></tr>
-            <tr><td>AKeyS</td><td>0.4138</td><td>1.4548</td><td>21.91s</td><td>3.03×</td></tr>
-            <tr><td>FlashVID</td><td>0.6495</td><td>1.5152</td><td>16.40s</td><td>4.05×</td></tr>
-            <tr><td>UniComp</td><td>0.6553</td><td>1.6476</td><td>13.08s</td><td>5.07×</td></tr>
-            <tr class="highlight"><td>Flash-VAReason</td><td>0.6585</td><td>1.6480</td><td>13.74s</td><td>4.83×</td></tr>
-          </tbody></table></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Dataset</th><th>Method</th><th>BERTScore F1 ↑</th><th>Qwen Overall ↑</th><th>Time ↓</th><th>Speedup ↑</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>CharadesEgo</td><td>Grounded-Video-LLM</td><td>0.5832</td><td>2.2019</td><td>111.74s</td><td>1.00×</td></tr>
+              <tr><td>CharadesEgo</td><td>UniComp</td><td>0.5702</td><td>2.2818</td><td>6.49s</td><td>17.21×</td></tr>
+              <tr class="highlight"><td>CharadesEgo</td><td>Flash-VAReason</td><td>0.5840</td><td>2.3789</td><td>6.10s</td><td>18.33×</td></tr>
+              <tr><td>Ego4D</td><td>Grounded-Video-LLM</td><td>0.6580</td><td>1.6083</td><td>66.34s</td><td>1.00×</td></tr>
+              <tr><td>Ego4D</td><td>UniComp</td><td>0.6553</td><td>1.6476</td><td>13.08s</td><td>5.07×</td></tr>
+              <tr class="highlight"><td>Ego4D</td><td>Flash-VAReason</td><td>0.6585</td><td>1.6480</td><td>13.74s</td><td>4.83×</td></tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-      <div class="table-card" style="margin-top:18px;">
-        <h3>Compression Ablation on CharadesEgo</h3>
-        <div class="mini-table-wrap"><table><thead><tr><th>Method</th><th>Qwen-Overall ↑</th><th>Avg. Inference Time ↓</th><th>Takeaway</th></tr></thead><tbody>
-          <tr><td>Full token</td><td>2.3838</td><td>10664.71 ms</td><td>Best quality but slow.</td></tr>
-          <tr><td>Uniform Sampling</td><td>2.0121</td><td>6144.51 ms</td><td>Fast but loses important acoustic evidence.</td></tr>
-          <tr><td>w/o ATF</td><td>2.3011</td><td>7221.89 ms</td><td>Temporal redundancy remains costly.</td></tr>
-          <tr><td>w/o SDC</td><td>2.3807</td><td>7249.35 ms</td><td>Quality remains high but final token reduction is weaker.</td></tr>
-          <tr class="highlight"><td>Flash-VAReason</td><td>2.3789</td><td>6096.97 ms</td><td>Near-full quality with the fastest latency.</td></tr>
-        </tbody></table></div>
-        <p class="table-note">Overall score is the average of semantic accuracy, completeness, and no-hallucination scores.</p>
+        <div class="caption">Flash-VAReason improves generation quality while keeping inference efficient through compressed acoustic tokens.</div>
       </div>
     </section>
 
-    <section>
-      <div class="section-title">
-        <h2>Core Takeaway</h2>
-        <p>Audio is not a decorative modality in video reasoning. It often carries the missing evidence: off-screen events, speaker emotion, environmental context, and causal triggers.</p>
+    <section id="demo">
+      <h2>Demo</h2>
+      <div class="video-box">
+        <div class="video-frame">
+          <iframe src="https://www.youtube.com/embed/7-h1yYGB0JI" title="Flash-VAReason demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="caption"><a href="https://youtu.be/7-h1yYGB0JI">Watch on YouTube</a></div>
       </div>
-      <div class="card"><p>Flash-VAReason keeps the audio stream useful by asking a simple token-level question: <strong>which acoustic tokens are unique enough to matter?</strong> The result is a practical visual-audio reasoning pipeline that preserves important cues while remaining fast enough for demo and deployment scenarios.</p></div>
     </section>
   </main>
-
-  <footer class="footer"><div class="wrap">© Flash-VAReason · Visual-Audio Guided Video Reasoning</div></footer>
+  <footer>Flash-VAReason · Visual-Audio Guided Video Reasoning</footer>
 </body>
 </html>
